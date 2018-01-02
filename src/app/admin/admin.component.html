@@ -1,0 +1,67 @@
+<div class="animated fadeIn">
+  <div class="card">
+      <div class="card-header">
+        <i class="fa fa-user"></i> Administrators
+        <div class="pull-right">
+            <button type="button"  (click)="smallModal.show()" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> New</button>
+            <button type="button" (click)="deleteItem" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <table class="table table-sm table-data table-bordered">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Tel</th>
+              <th>Active</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of UserList;">
+              <td>{{ user.username }}</td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.tel }}</td>
+              <td class="text-center">
+                  <span class="badge badge-success" *ngIf="user.active=='Y'">Active</span>
+                  <span class="badge badge-danger" *ngIf="user.active=='N'">Unactive</span>
+              </td>
+              <td class="action">
+                  <a routerLink="/admin/{{ user.id }}/edit" title="Edit" class="text-primary"><i class="icon-note"></i></a>
+                  <a routerLink="/admin/{{ user.id }}/delete" title="Delete" class="text-danger"><i class="icon-trash"></i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>
+<!-- 
+  ====================================================================================================
+  :: Modal form ::
+  ====================================================================================================
+-->
+<div bsModal #smallModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Modal title</h4>
+          <button type="button" class="close" (click)="smallModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>One fine body&hellip;</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="smallModal.hide()">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  

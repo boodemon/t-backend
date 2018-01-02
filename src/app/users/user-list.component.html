@@ -1,0 +1,101 @@
+<div class="animated fadeIn">
+  <div class="card">
+      <div class="card-header">
+        <i class="fa fa-user"></i> Administrators
+        <div class="pull-right">
+            <button type="button"  (click)="newModal(frmUser)" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> New</button>
+            <button type="button" (click)="deleteItem" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <table class="table table-sm table-data table-bordered">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Tel</th>
+              <th>Active</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of UserList;">
+              <td>{{ user.username }}</td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.tel }}</td>
+              <td class="text-center">
+                  <span class="badge badge-success" *ngIf="user.active=='Y'">Active</span>
+                  <span class="badge badge-danger" *ngIf="user.active=='N'">Unactive</span>
+              </td>
+              <td class="action">
+                  <a title="Edit {{ user.username }}" (click)="updateModal(frmUser,user.id)" class="text-primary"><i class="icon-note"></i></a>
+                  <a title="Delete {{ user.username }}" (click)="deleteUser(user.id)" class="text-danger"><i class="icon-trash"></i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>
+<!-- 
+  ====================================================================================================
+  :: Modal form ::
+  ====================================================================================================
+-->
+<ng-template #frmUser>
+ <div class="modal-header">
+   <h4 class="modal-title pull-left">{{frmTitle}}</h4>
+   <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+     <span aria-hidden="true">&times;</span>
+   </button>
+  </div>
+  <div class="modal-body">
+    <form class="form-horizontal" ngSubmit="onSubmit()" >
+      <div class="form-group">
+        <label class="control-label">Username : </label>
+        <input type="text" class="form-control" [(ngModel)]="username" name="username" />
+        <input type="hidden" [(ngModel)]="userID" name="userID" />
+        <span class="text-danger">{{ errUsername }}</span>
+      </div>
+      <div class="form-group">
+        <label class="control-label">E-mail : </label>
+        <input type="text" class="form-control" [(ngModel)]="email" name="email" />
+        <span class="text-danger">{{ errEmail }}</span>
+      </div>
+      <div class="form-group">
+        <label class="control-label">Password : </label>
+        <input type="password" class="form-control" [(ngModel)]="password" name="password" />
+        <span class="text-danger">{{ errPassword }}</span>
+      </div>
+      <div class="form-group">
+        <label class="control-label">Name : </label>
+        <input type="text" class="form-control" [(ngModel)]="name" name="name" />
+        <span class="text-danger">{{ errName }}</span>
+    
+      </div>
+      <div class="form-group">
+        <label class="control-label">Tel : </label>
+        <input type="text" class="form-control" [(ngModel)]="tel" name="tel" />
+        <span class="text-danger">{{ errTel }}</span>
+      </div>
+      <div class="form-group ">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox"  [(ngModel)]="active" name="active" value="Y" /> Active
+            </label>
+        </div>
+      </div>
+    
+      <div class="form-group text-right mt-10">
+        <button type="button" class="btn btn-primary" (click)="onSubmit()"><i class="fa fa-save"></i> SAVE</button>
+        <button type="button" class="btn btn-default" (click)="modalRef.hide()"><i class="fa fa-save"></i> cancel</button>
+      </div>
+      
+    </form>  
+  </div>
+</ng-template>
+
+

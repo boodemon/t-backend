@@ -1,0 +1,30 @@
+<form class="form-horizontal">
+  <div class="form-groups">
+    <label class="control-label">Username : </label>
+    <input type="text" class="form-control" [(ngModel)]="username" name="username" />
+    <input type="hidden" [(ngModel)]="userID" name="userID" />
+  </div>
+  <div class="form-groups">
+    <label class="control-label">E-mail : </label>
+    <input type="text" class="form-control" [(ngModel)]="email" name="email" />
+  </div>
+  <div class="form-groups">
+    <label class="control-label">Password : </label>
+    <input type="password" class="form-control" [(ngModel)]="password" name="password" />
+  </div>
+  <div class="form-groups">
+    <label class="control-label">Name : </label>
+    <input type="text" class="form-control" [(ngModel)]="name" name="name" />
+
+  </div>
+  <div class="form-groups">
+    <label class="control-label">Tel : </label>
+    <input type="text" class="form-control" [(ngModel)]="tel" name="tel" />
+  </div>
+
+  <div class="form-groups text-right">
+    <button type="button" class="btn btn-primary" (click)="submit()"><i class="fa fa-save"></i> SAVE</button>
+    <button type="button" class="btn btn-default" (click)="close()"><i class="fa fa-save"></i> cancel</button>
+  </div>
+  
+</form>
