@@ -45,12 +45,17 @@ export class AuthService {
           if( response['result'] == 'false'){
             window.localStorage.removeItem('auth0');
           }
+        },
+        err => {
+          alert('cannot connect server please try again');
+          window.localStorage.removeItem('auth0');
         });
       }
       return window.localStorage.getItem('auth0') ? true : false;
   }
 
   online(){
+    this.check();
     let user = window.localStorage.getItem('auth0');
     console.log('online : ', user )
     if( user !== null && user !== '' ){

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { AuthService } from '../../services/auth.service'
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-category',
@@ -6,10 +8,29 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit {
+  modalRef: BsModalRef;
+  TemplateRef: any;
+  frmTitle: string;
+  input:any={};
 
-  constructor() { }
+  constructor(
+    private Auth: AuthService,
+    private modalService: BsModalService,
+
+  ) { 
+    Auth.online();
+  }
 
   ngOnInit() {
   }
+  newModal(template: TemplateRef<any>) {
+    this.input = {
+      image : '',
+      name  : '',
+      active : false,
+    }
 
+    this.frmTitle = 'Add new Category';
+    this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
+  }
 }
