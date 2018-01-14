@@ -34,6 +34,7 @@ import { LogoutComponent } from './Auth/logout/logout.component';
 import { AppUserModule } from './users/app-user.module';
 import { AppMemberModule } from './member/app-member.module';
 import { AppFoodModule } from './foods/app-food.module';
+import { SelectallDirective } from './directive/selectall.directive';
 
 
 
@@ -54,6 +55,7 @@ import { AppFoodModule } from './foods/app-food.module';
     PaymentComponent,
     CheckComponent,
     LogoutComponent,
+    SelectallDirective,
   ],
   imports: [
     BrowserModule,

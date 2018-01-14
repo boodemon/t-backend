@@ -1,1 +1,6 @@
-<router-outlet></router-outlet>
+<router-outlet>
+    <div class="loading-overlay" *ngIf="loading">
+        <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+        <md-progress-bar mode="indeterminate"></md-progress-bar>
+    </div>
+</router-outlet>

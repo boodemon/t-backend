@@ -18,4 +18,16 @@ export class CategoryService {
     return this.http.get( this.api + '/category/' + id + '/edit');
   }
 
+  postNew(data){
+    return this.http.post( this.api + '/category',data);
+  }
+
+  postUpdate(id, data){
+    return this.http.post( this.api + '/category/' + id , data );
+  }
+
+  getDelete(id){
+    return this.http.post( this.api + '/category/' + id ,{_method:'DELETE'});
+  }
+
 }

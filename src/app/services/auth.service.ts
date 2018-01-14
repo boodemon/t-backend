@@ -35,7 +35,7 @@ export class AuthService {
   }
 
   check(){
-      
+      let result:boolean;
       let user = window.localStorage.getItem('auth0');
       if( user !== null && user !== '' ){
         user = JSON.parse( user );
@@ -44,21 +44,25 @@ export class AuthService {
         .subscribe((response)=>{
           if( response['result'] == 'false'){
             window.localStorage.removeItem('auth0');
+            result = false;
+          }else{
+            result = true;
           }
         },
         err => {
           alert('cannot connect server please try again');
           window.localStorage.removeItem('auth0');
+          result = false;
         });
       }
-      return window.localStorage.getItem('auth0') ? true : false;
+      return result;
   }
 
   online(){
     this.check();
     let user = window.localStorage.getItem('auth0');
     console.log('online : ', user )
-    if( user !== null && user !== '' ){
+    if( user !== null && user !== '' && user !== undefined ){
      return JSON.parse( user );
     }else{ 
       this.Router.navigateByUrl('login');

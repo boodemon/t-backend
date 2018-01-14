@@ -42,6 +42,11 @@ export class LoginComponent implements OnInit {
           window.localStorage.setItem('auth0',result); 
           this.Router.navigateByUrl('dashboard');
       }
+    },
+    err => {
+      this.responsding = 'Error : ' + err.message
+      this.result = false;
+      
     });
   }
 
