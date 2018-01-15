@@ -164,6 +164,7 @@ export class CategoryComponent implements OnInit {
     this.formCate.get('name').setValue('');
     this.formCate.get('active').setValue(false);
     this.formCate.get('_method').setValue('POST');
+    this.formCate.get('category_sort').setValue(0);
     this.img = '';
 
   }

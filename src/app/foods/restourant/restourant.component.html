@@ -2,10 +2,12 @@
     <div class="card">
         <div class="card-header">
           <i class="fa fa-user"></i> Restourant food
-          <div class="pull-right">
-              <button type="button"  (click)="newModal(frmUser)" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> New</button>
-              <button type="button" (click)="deleteItem" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
-          </div>
+        <div class="pull-right">
+          <button type="button" (click)="newModal(frmRestourant)" class="btn btn-sm btn-primary">
+            <i class="fa fa-plus"></i> New</button>
+          <button type="button" (click)="multiDelete()" class="btn btn-sm btn-danger">
+            <i class="fa fa-trash"></i> Delete</button>
+        </div>
         </div>
         
         <div class="card-body">
@@ -45,4 +47,94 @@
     ====================================================================================================
   -->
   
+  <ng-template #frmRestourant>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">{{frmTitle}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <!-- Form category input -->
+      <form enctype="multipart/form-data" class="form-horizontal" [formGroup]="formRestourant" (ngSubmit)="onSubmit()">
+        <div class="form-group row" *ngIf="img!=''">
+          <label class="col-md-2 form-control-label"></label>
+          <div class="col-md-10">
+            <img src="{{ img_path + img }}" class="img-preview">
+          </div>
+        </div>
+  
+        <div class="form-group row">
+          <label class="col-md-2 form-control-label">Image : </label>
+          <div class="col-md-10">
+            <input type="file" id="image" (change)="onFileChange($event)" #fileInput />
+            <input type="hidden" id="id" id="id" formControlName="id" />
+          </div>
+        </div>
+  
+        <div class="form-group row">
+          <label class="col-md-2 form-control-label">Name : </label>
+          <div class="col-md-10">
+            <input type="text" class="form-control" name="restourant" id="restourant" formControlName="restourant" required/>
+            <div *ngIf="formRestourant.controls['restourant'].invalid && (formRestourant.controls['restourant'].dirty || formRestourant.controls['restourant'].touched)"
+              class="alert alert-danger">
+              <div *ngIf="formRestourant.controls['restourant'].errors.required">
+                *Please enter restourant name.
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="form-group row">
+          <label class="col-md-2 form-control-label">Contact : </label>
+          <div class="col-md-10">
+            <textarea class="form-control" name="contact" id="contact" formControlName="contact" required></textarea>
+            <div *ngIf="formRestourant.controls['contact'].invalid && (formRestourant.controls['contact'].dirty || formRestourant.controls['contact'].touched)"
+              class="alert alert-danger">
+              <div *ngIf="formRestourant.controls['restourant'].errors.required">
+                *Please enter restourant contact.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-md-2 form-control-label">Tel : </label>
+          <div class="col-md-10">
+            <input type="text" class="form-control" name="tel" id="tel" formControlName="tel" required/>
+            <div *ngIf="formRestourant.controls['tel'].invalid && (formRestourant.controls['tel'].dirty || formRestourant.controls['tel'].touched)"
+              class="alert alert-danger">
+              <div *ngIf="formRestourant.controls['tel'].errors.required">
+                *Please enter restourant tel.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-md-2 form-control-label">Sort : </label>
+          <div class="col-md-3">
+            <input type="text" class="form-control" name="category_sort" id="category_sort" formControlName="category_sort" />
+          </div>
+        </div>
+  
+        <div class="form-group row">
+          <label class="col-md-2 form-control-label">Status : </label>
+          <div class="col-md-10">
+            <label class="checkbox">
+              <input type="checkbox" id="active" formControlName="active" /> Active
+            </label>
+          </div>
+        </div>
+  
+        <div class="form-groups text-right">
+          <button type="submit" class="btn btn-primary" [disabled]="formRestourant.pristine || formRestourant.invalid">
+            <i class="fa fa-save"></i> SAVE</button>
+          <button type="button" class="btn btn-default" (click)="modalRef.hide()">
+            <i class="fa fa-save"></i> cancel</button>
+        </div>
+      </form>
+      <!-- /Form category input -->
+    </div>
+  </ng-template>
   

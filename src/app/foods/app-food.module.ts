@@ -9,6 +9,7 @@ import { RestourantComponent } from './restourant/restourant.component';
 import { CategortFormComponent } from './category/categort-form.component';
 // Service //
 import { CategoryService } from '../services/category.service';
+import { RestourantService } from '../services/restourant.service';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { CategoryService } from '../services/category.service';
     CategortFormComponent
   ],
   providers:[
-    CategoryService
+    CategoryService,
+    RestourantService
   ]
 })
 export class AppFoodModule { }
