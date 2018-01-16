@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import { Base } from './app.service';
+import { AuthService } from './auth.service';
 @Injectable()
 export class CategoryService {
   api = Base.API_URI;
+  token = window.localStorage.getItem('auth0');
 
   constructor(
     private http:HttpClient,
@@ -12,7 +14,7 @@ export class CategoryService {
   ) { }
 
   getAll(){
-    return this.http.get( this.api + '/category');
+    return this.http.get( this.api + '/category?token='+this.token );
   }
   getEdit(id){
     return this.http.get( this.api + '/category/' + id + '/edit');

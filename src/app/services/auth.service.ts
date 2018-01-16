@@ -29,44 +29,64 @@ export class AuthService {
     this.setToken();
     return window.localStorage.getItem('_token');
   }
+
+  token(){
+    return window.localStorage.getItem('auth0');
+  }
   
   postLogin(username:string,password:string,token:string){
     return this.http.post( this.API + '/auth/login',{username,password,token,_method:'POST'});
   }
 
   check(){
-      let result:boolean;
-      let user = window.localStorage.getItem('auth0');
-      if( user !== null && user !== '' ){
-        user = JSON.parse( user );
-        console.log ('login finished' , user);
-        this.http.get(this.API +'/auth/check?username=' + user['username'] + '&token=' + user['token'] )
+      let data:any = {};
+      let token = window.localStorage.getItem('auth0');
+    console.log('login finished', token);
+    if (token !== null && token !== '' && token !== undefined ){
+
+      this.http.get(this.API + '/auth/check?token=' + token )
         .subscribe((response)=>{
-          if( response['result'] == 'false'){
-            window.localStorage.removeItem('auth0');
-            result = false;
+          console.log('get check ', response);
+          if( response['result'] == 'successful'){
+            data = {
+              'result' : true,
+              'data'   : response['data']
+            };
+            
           }else{
-            result = true;
+            data = {
+              'result' : false,
+              'data'   : null
+            }
           }
-        },
+          window.localStorage.setItem('user',JSON.stringify(data));
+          },
         err => {
           alert('cannot connect server please try again');
           window.localStorage.removeItem('auth0');
-          result = false;
+          data = {
+            'result' : false,
+            'data'    : null,
+          };
+          window.localStorage.setItem('user', JSON.stringify(data));
         });
       }
-      return result;
+      return window.localStorage.getItem('user');
   }
 
   online(){
     this.check();
-    let user = window.localStorage.getItem('auth0');
+    let users = window.localStorage.getItem('user');
+    let user = JSON.parse( users );
+    //let user = window.localStorage.getItem('auth0');
     console.log('online : ', user )
-    if( user !== null && user !== '' && user !== undefined ){
-     return JSON.parse( user );
+    
+    if( user.result ){
+      return user.data;
     }else{ 
-      this.Router.navigateByUrl('login');
+     // this.Router.navigateByUrl('login');
     }
+    
   }
 
 }

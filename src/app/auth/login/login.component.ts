@@ -9,9 +9,9 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   constructor( private Auth:AuthService, private Router:Router) { 
-    if( Auth.check() === true ){
-      Router.navigateByUrl('dashboard');
-    }
+    // if( Auth.check() === true ){
+    //   Router.navigateByUrl('dashboard');
+    // }
   }
   private _token:string = window.localStorage.getItem('_token');
   private username:string;
@@ -27,26 +27,27 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
-    console.log('click login username : ', this.username ,' password : ', this.password, ' token : ', this._token );
+    //console.log('click login username : ', this.username ,' password : ', this.password, ' token : ', this._token );
     this.Auth.postLogin( this.username, this.password, this._token).subscribe((response)=>{
-          console.log('login result : ', response['auth'])
-      if( response['result'] == 'error'){
-        this.responsding = response['message'] ;
-        this.username = '';
-        this.password = '';
-        this.result = false;
-      }else{
+      //console.log('login result : ', response);
+      if( response['result'] == 'successful'){
           this.responsding = 'Login successful';
           this.result = true;
-          let result = JSON.stringify(response['auth']);
+          let result = response['auth'];
+          //console.log('login token : ', result);
           window.localStorage.setItem('auth0',result); 
           this.Router.navigateByUrl('dashboard');
+      }else{
+          this.responsding = response['message'] ;
+          this.username = '';
+          this.password = '';
+          this.result = false;
       }
+      
     },
     err => {
       this.responsding = 'Error : ' + err.message
       this.result = false;
-      
     });
   }
 
