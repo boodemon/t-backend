@@ -20,22 +20,18 @@ export class LoginComponent implements OnInit {
   private result:boolean;
 
   ngOnInit() {
-    this.Auth.setToken();
-    this._token = window.localStorage.getItem('_token');
-    console.log( 'token : ',  window.localStorage.getItem('_token') );
-
+    this.Auth.token();
   }
 
   login(){
-    //console.log('click login username : ', this.username ,' password : ', this.password, ' token : ', this._token );
-    this.Auth.postLogin( this.username, this.password, this._token).subscribe((response)=>{
+    this.Auth.postLogin( this.username, this.password ).subscribe((response)=>{
       //console.log('login result : ', response);
       if( response['result'] == 'successful'){
           this.responsding = 'Login successful';
           this.result = true;
           let result = response['auth'];
           //console.log('login token : ', result);
-          window.localStorage.setItem('auth0',result); 
+          window.localStorage.setItem('token',result); 
           this.Router.navigateByUrl('dashboard');
       }else{
           this.responsding = response['message'] ;

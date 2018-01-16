@@ -23,6 +23,6 @@ export class FullLayoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.Auth.setToken();
+   
   }
 }
