@@ -5,17 +5,19 @@ import { Base } from './app.service';
 
 @Injectable()
 export class RestourantService {
-  api = Base.API_URI;
+  api   = Base.API_URI;
+  token = window.localStorage.getItem('token');
+
 
   constructor(
     private http:HttpClient,
     private router:Router
   ) { }
   getAll() {
-    return this.http.get(this.api + '/restourant');
+    return this.http.get(this.api + '/restourant?token=' + this.token );
   }
   getEdit(id) {
-    return this.http.get(this.api + '/restourant/' + id + '/edit');
+    return this.http.get(this.api + '/restourant/' + id + '/edit?token=' + this.token);
   }
 
   postNew(data) {
@@ -27,6 +29,6 @@ export class RestourantService {
   }
 
   getDelete(id) {
-    return this.http.post(this.api + '/restourant/' + id, { _method: 'DELETE' });
+    return this.http.post(this.api + '/restourant/' + id, { _method: 'DELETE',token:this.token });
   }
 }

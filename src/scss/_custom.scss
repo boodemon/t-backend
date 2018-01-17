@@ -8,3 +8,19 @@
         cursor: pointer;
     }
 }
+table{
+    tbody{
+        tr{
+            td{
+                p{
+                    line-height: 1.1;
+                    margin:0 !important;
+                    padding:0;
+                }
+            }
+        }
+    }
+}
+img{
+    max-width: 100%;
+}

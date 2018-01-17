@@ -14,13 +14,13 @@ import { RestourantService } from '../../services/restourant.service';
   styleUrls: ['./restourant.component.css']
 })
 export class RestourantComponent implements OnInit {
-  frmRestourant: FormGroup;
+  formRestourant: FormGroup;
   modalRef: BsModalRef;
   TemplateRef: any;
   frmTitle: string;
   rows: any = [];
   loading: boolean = false;
-  img_path: string = Base.img_path + 'category/';
+  img_path: string = Base.img_path + 'restourant/';
   img: string;
   selectAll: boolean = false;
   onSelect: boolean = false;
@@ -48,14 +48,15 @@ export class RestourantComponent implements OnInit {
   }
 
   createForm() {
-    this.frmRestourant = this.fb.group({
+    this.formRestourant = this.fb.group({
       id: 0,
       restourant: ['', Validators.required],
       contact: ['', Validators.required],
       tel: ['', Validators.required],
       image: null,
       active: false,
-      _method: 'POST'
+      _method: 'POST',
+      token: this.Auth.token()
     });
   }
 
@@ -64,19 +65,20 @@ export class RestourantComponent implements OnInit {
     this.frmTitle = 'Add new Category';
     this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
   }
+
   onEdit(template: TemplateRef<any>, id) {
     this.frmTitle = 'Update Category';
     this.restourant.getEdit(id).subscribe((response) => {
       let result = response['result'];
       let item = response['data'];
       if (result == 'successful') {
-        this.frmRestourant.get('id').setValue(item.id);
-        this.frmRestourant.get('image').setValue(null);
-        this.frmRestourant.get('restourant').setValue(item.restourant);
-        this.frmRestourant.get('contact').setValue(item.contact);
-        this.frmRestourant.get('tel').setValue(item.tel);
-        this.frmRestourant.get('_method').setValue('PUT');
-        this.frmRestourant.get('active').setValue(item.active == 'Y' ? true : false);
+        this.formRestourant.get('id').setValue(item.id);
+        this.formRestourant.get('image').setValue(null);
+        this.formRestourant.get('restourant').setValue(item.restourant);
+        this.formRestourant.get('contact').setValue(item.contact);
+        this.formRestourant.get('tel').setValue(item.tel);
+        this.formRestourant.get('_method').setValue('PUT');
+        this.formRestourant.get('active').setValue(item.active == 'Y' ? true : false);
         this.img = item.image;
       } else {
         alert(response['msg']);
@@ -93,7 +95,7 @@ export class RestourantComponent implements OnInit {
       let file = event.target.files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
-        this.frmRestourant.get('image').setValue({
+        this.formRestourant.get('image').setValue({
           filename: file.name,
           filetype: file.type,
           value: reader.result.split(',')[1]
@@ -101,31 +103,39 @@ export class RestourantComponent implements OnInit {
       };
     }
   }
+
   onSubmit() {
-    const formModel = this.frmRestourant.value;
+    const formModel = this.formRestourant.value;
     this.loading = true;
     if (formModel.id == '0') {
       this.restourant.postNew(formModel).subscribe((response) => {
         if (response['result'] == 'successful') {
           this.fetchAll();
-        } else {
-          alert(response['msg']);
+        } else if( response['result'] == 'error') {
+          alert('new error ' + response['msg']);
         }
+        setTimeout(() => {
+          this.modalRef.hide();
+        }, 1000);
 
+      },
+      err=>{
+        alert('new error ' + err['message']);
       });
     } else {
       this.restourant.postUpdate(formModel.id, formModel).subscribe((response) => {
         console.log('response update ', response);
-        if (response['result'] == 'successful') {
+        if (response['resule'] == 'successful') {
           this.fetchAll();
         } else {
-          alert(response['msg']);
+          alert('update ' + response['msg']);
         }
+        setTimeout(() => {
+          this.modalRef.hide();
+        }, 1000);
       });
     }
-    setTimeout(() => {
-      this.modalRef.hide();
-    }, 1000);
+    
   }
 
   onDelete(id) {
@@ -163,15 +173,14 @@ export class RestourantComponent implements OnInit {
   }
 
   clearFile() {
-    this.frmRestourant.get('image').setValue(null);
-    this.frmRestourant.get('id').setValue(0);
-    this.frmRestourant.get('restourant').setValue('');
-    this.frmRestourant.get('contact').setValue('');
-    this.frmRestourant.get('tel').setValue('');
-    this.frmRestourant.get('active').setValue(false);
-    this.frmRestourant.get('_method').setValue('POST');
+    this.formRestourant.get('image').setValue(null);
+    this.formRestourant.get('id').setValue(0);
+    this.formRestourant.get('restourant').setValue('');
+    this.formRestourant.get('contact').setValue('');
+    this.formRestourant.get('tel').setValue('');
+    this.formRestourant.get('active').setValue(false);
+    this.formRestourant.get('_method').setValue('POST');
     this.img = '';
-
   }
 
   onSelectAll() {

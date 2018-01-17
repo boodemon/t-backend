@@ -12,6 +12,7 @@ import { CategoryService } from '../../services/category.service';
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.css']
 })
+
 export class CategoryComponent implements OnInit {
   formCate:FormGroup;
   modalRef: BsModalRef;
@@ -41,6 +42,7 @@ export class CategoryComponent implements OnInit {
 
   cateAll(){
     return this.category.getAll().subscribe((response) => {
+      console.log('response category : ', response);
       this.rows = response['data']['data'];
     });
   }
@@ -52,7 +54,8 @@ export class CategoryComponent implements OnInit {
       image: null,
       active:false,
       _method:'POST',
-      category_sort:0
+      category_sort:0,
+      token:this.Auth.token()
     });
   }
 
@@ -73,6 +76,7 @@ export class CategoryComponent implements OnInit {
           this.formCate.get('category_sort').setValue(item.category_sort);
           this.formCate.get('_method').setValue('PUT');
           this.formCate.get('active').setValue(item.active == 'Y' ? true : false );
+          this.formCate.get('token').setValue( this.Auth.token() );
           this.img =  item.image;
         }else{
           alert(response['msg']);

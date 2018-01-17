@@ -13,7 +13,6 @@ export class LoginComponent implements OnInit {
     //   Router.navigateByUrl('dashboard');
     // }
   }
-  private _token:string = window.localStorage.getItem('_token');
   private username:string;
   private password:string;
   private responsding:string;
@@ -31,7 +30,8 @@ export class LoginComponent implements OnInit {
           this.result = true;
           let result = response['auth'];
           //console.log('login token : ', result);
-          window.localStorage.setItem('token',result); 
+          window.localStorage.setItem('token',result);
+          window.localStorage.setItem('auth',JSON.stringify(response['user']));
           this.Router.navigateByUrl('dashboard');
       }else{
           this.responsding = response['message'] ;

@@ -1,13 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './full-layout.component.html',
   styleUrls:['./full-layout.component.css']
 })
 export class FullLayoutComponent implements OnInit {
-  constructor(private Auth:AuthService){}
+  private users:string;
+  private user:any;
+
+  constructor(
+              private Auth:AuthService,
+              private Router:Router 
+            ){}
 
   public disabled = false;
   public status: {isopen: boolean} = {isopen: false};
@@ -23,6 +29,18 @@ export class FullLayoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   
+    this.users = window.localStorage.getItem('auth');
+    console.log('this user = ', this.users);
+    
+    if( this.users ){
+      this.user = JSON.parse( this.users );
+      console.log( 'this user = ', this.user );
+    }else{
+      this.Auth.logout();
+      this.Router.navigateByUrl('logout');
+      //this.user = { name : null};
+    }
+    
+
   }
 }

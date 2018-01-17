@@ -21,57 +21,33 @@ export class AuthService {
     return this.http.post( this.API + '/auth/login',{username,password,_method:'POST'});
   }
 
-  check(){
-      let data:any = {};
-      let token = window.localStorage.getItem('token');
-      if (token !== null && token !== '' && token !== undefined ){
-
-        this.http.get(this.API + '/auth/check?token=' + token )
-          .subscribe((response)=>{
-            if( response['result'] == 'successful'){
-              data = {
-                'result' : true,
-                'data'   : response['data']
-              };
-              
-            }else{
-              data = {
-                'result' : false,
-                'data'   : null
-              }
-            }
-            window.localStorage.setItem('user',JSON.stringify(data));
-            },
-          err => {
-            alert('cannot connect server please try again');
-            window.localStorage.removeItem('token');
-            data = {
-              'result' : false,
-              'data'    : null,
-            };
-            window.localStorage.setItem('user', JSON.stringify(data));
-          });
-        }
-        return window.localStorage.getItem('user');
-  }
-
   online(){
       let token = window.localStorage.getItem('token');
+      let auth = window.localStorage.getItem('auth');
       let data:any;
       if (token !== null && token !== '' && token !== undefined ){
         this.http.get(this.API + '/auth/check?token=' + token )
           .subscribe((response)=>{
             if( response['result'] == 'error'){
-              window.localStorage.removeItem('token');
+              this.logout();
               this.Router.navigateByUrl('login');              
             }
             },
           err => {
             alert('cannot connect server please try again');
-            window.localStorage.removeItem('token');
+            this.logout();
             this.Router.navigateByUrl('login');
           });
         }  
+  }
+
+  code(res){
+    console.log('check code ' , res );
+  }
+
+  logout(){
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('auth');
   }
 
 }
