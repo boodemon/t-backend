@@ -28,15 +28,15 @@ export class AuthService {
       if (token !== null && token !== '' && token !== undefined ){
         this.http.get(this.API + '/auth/check?token=' + token )
           .subscribe((response)=>{
-            if( response['result'] == 'error'){
+           // alert('response code : ' + response['code']);
+            if( response['code'] != 200){
+              alert('Error !! '+ response['msg'] );
               this.logout();
-              this.Router.navigateByUrl('login');              
             }
-            },
+          },
           err => {
             alert('cannot connect server please try again');
             this.logout();
-            this.Router.navigateByUrl('login');
           });
         }  
   }
@@ -48,6 +48,7 @@ export class AuthService {
   logout(){
     window.localStorage.removeItem('token');
     window.localStorage.removeItem('auth');
+    window.location.href = "/";
   }
 
 }

@@ -30,15 +30,12 @@ export class FullLayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.users = window.localStorage.getItem('auth');
-    console.log('this user = ', this.users);
-    
     if( this.users ){
       this.user = JSON.parse( this.users );
       console.log( 'this user = ', this.user );
     }else{
+      alert('Please Login!!');
       this.Auth.logout();
-      this.Router.navigateByUrl('logout');
-      //this.user = { name : null};
     }
     
 

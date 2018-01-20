@@ -42,8 +42,15 @@ export class CategoryComponent implements OnInit {
 
   cateAll(){
     return this.category.getAll().subscribe((response) => {
-      console.log('response category : ', response);
-      this.rows = response['data']['data'];
+      if( response['code'] != 200 ){
+        alert( response['msg']);
+        this.Auth.logout();
+      }else{
+        this.rows = response['data']['data'];
+      }
+    },
+    err => {
+      alert('Error!!' + err['message'] );
     });
   }
 
@@ -183,7 +190,4 @@ export class CategoryComponent implements OnInit {
       return item.selected == true;
     })
   }
-
-
-
 }

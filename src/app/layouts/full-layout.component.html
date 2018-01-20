@@ -11,7 +11,7 @@
         <!--
         <img src="assets/img/avatars/6.jpg" class="img-avatar" alt="">
         -->
-        <span class="d-md-down-none">{{ user.name }}</span>
+        <span class="d-md-down-none">{{ user ? user.name : 'Error!!' }}</span>
       </a>
       <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
         <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>

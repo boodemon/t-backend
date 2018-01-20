@@ -24,6 +24,7 @@ export class RestourantComponent implements OnInit {
   img: string;
   selectAll: boolean = false;
   onSelect: boolean = false;
+  restourantGroup:any;
 
   @ViewChild('fileInput') fileInput: ElementRef;
 
@@ -39,11 +40,28 @@ export class RestourantComponent implements OnInit {
   }
   ngOnInit() {
     this.fetchAll();
+    this.fetchGroup();
+  }
+
+  fetchGroup(){
+    return this.category.getAll().subscribe(response => {
+      if( response['code'] == 200 ){
+        this.restourantGroup = response['data']['data'];
+      }
+    })
   }
 
   fetchAll() {
     return this.restourant.getAll().subscribe((response) => {
-      this.rows = response['data']['data'];
+      if( response['code'] != 200 && response['code'] != 204 ){
+        alert( response['msg'] );
+        this.Auth.logout();
+      }else{
+        this.rows = response['data']['data'];
+      }
+    },
+    err => {
+      alert('Error !! '+ err.message);
     });
   }
 
@@ -184,6 +202,7 @@ export class RestourantComponent implements OnInit {
   }
 
   onSelectAll() {
+    console.log('select all = ' , this.rows.length );
     for (var i = 0; i < this.rows.length; i++) {
       this.rows[i].selected = this.selectAll;
     }
