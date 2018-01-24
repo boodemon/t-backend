@@ -14,9 +14,10 @@
           <table class="table table-sm table-data table-bordered">
             <thead>
               <tr>
-                <th class="text-center"><input type="checkbox" (change)="onSelectAll()"/></th>
+                <th class="text-center"><input type="checkbox" [(ngModel)]="selectAll" (change)="onSelectAll()"/></th>
                 <th>Image</th>
                 <th>Restourant</th>
+                <th>Groups</th>
                 <th>Active</th>
                 <th>Action</th>
               </tr>
@@ -34,9 +35,12 @@
                   <p>{{ row.contact }} </p>
                   <p>Tel. {{ row.tel }}</p>
               </td>
+              <td>
+                  {{ row.groups }}
+              </td>
               <td class="text-center">
                     <span class="badge badge-success">Active</span>
-                </td>
+              </td>
               <td class="action">
                 <a title="Edit" class="text-primary" (click)="onEdit(frmRestourant,row.id)">
                   <i class="icon-note"></i>
@@ -89,7 +93,7 @@
             <div class="row">
                 <div class="col-md-3" *ngFor="let g of restourantGroup">
                     <label>
-                        <input type="checkbox" [(ngModel)]="g.group"/> {{ g.name }}
+                        <input type="checkbox" [value]="g.id" [(ngModel)]="ckGroups" formControlName="groups"/> {{ g.name }}
                     </label>
                 </div>
             </div>

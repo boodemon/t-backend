@@ -19,12 +19,15 @@ export class RestourantComponent implements OnInit {
   TemplateRef: any;
   frmTitle: string;
   rows: any = [];
+  groups:any=[];
+  ckGroups:any=[];
+  gp:any = [];
   loading: boolean = false;
   img_path: string = Base.img_path + 'restourant/';
   img: string;
   selectAll: boolean = false;
   onSelect: boolean = false;
-  restourantGroup:any;
+  restourantGroup:any = [];
 
   @ViewChild('fileInput') fileInput: ElementRef;
 
@@ -53,11 +56,8 @@ export class RestourantComponent implements OnInit {
 
   fetchAll() {
     return this.restourant.getAll().subscribe((response) => {
-      if( response['code'] != 200 && response['code'] != 204 ){
-        alert( response['msg'] );
-        this.Auth.logout();
-      }else{
-        this.rows = response['data']['data'];
+      if( response['code'] == 200 ){
+        this.rows = response['data'];
       }
     },
     err => {
@@ -74,7 +74,8 @@ export class RestourantComponent implements OnInit {
       image: null,
       active: false,
       _method: 'POST',
-      token: this.Auth.token()
+      token: this.Auth.token(),
+      groups: []
     });
   }
 
@@ -85,6 +86,7 @@ export class RestourantComponent implements OnInit {
   }
 
   onEdit(template: TemplateRef<any>, id) {
+
     this.frmTitle = 'Update Category';
     this.restourant.getEdit(id).subscribe((response) => {
       let result = response['result'];
@@ -98,12 +100,32 @@ export class RestourantComponent implements OnInit {
         this.formRestourant.get('_method').setValue('PUT');
         this.formRestourant.get('active').setValue(item.active == 'Y' ? true : false);
         this.img = item.image;
+        this.ckGroups = item.groups;
+
+        if( item.groups.length !== null )
+        this.groupChecked( item.groups );
+        
       } else {
         alert(response['msg']);
         this.modalRef.hide();
       }
     });
     this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
+  }
+  groupChecked(groups){
+    console.log('groups : ', groups );
+    groups = this.restourantGroup.every(function (item: any) {
+        console.log('restourantGroup item ', item);
+        //return item.selected == true;
+    })
+    /*
+    for ( let x = 0; x < this.restourantGroup.length; x++ ) {
+        let resId = this.restourantGroup[x].id;
+        if (groups.indexOf(resId) !== -1){
+            this.groups[resId] = true;
+        }
+    }
+    */
   }
 
   onFileChange(event) {
@@ -122,9 +144,25 @@ export class RestourantComponent implements OnInit {
     }
   }
 
+  groupVal(){
+    const group:any = [];
+    for(let x = 0; x < this.restourantGroup.length; x++){       
+      if (this.restourantGroup[x].selected !== undefined){
+          if (this.restourantGroup[x].selected === true )
+              group.push( this.restourantGroup[x].id );
+       }
+    }
+    this.formRestourant.get('groups').setValue(group);
+    //return group;
+  }
+
   onSubmit() {
+    this.groupVal();
     const formModel = this.formRestourant.value;
+    console.log('formModel ', formModel);
+    const frm = new FormData();
     this.loading = true;
+    
     if (formModel.id == '0') {
       this.restourant.postNew(formModel).subscribe((response) => {
         if (response['result'] == 'successful') {
@@ -141,6 +179,7 @@ export class RestourantComponent implements OnInit {
         alert('new error ' + err['message']);
       });
     } else {
+      console.log('form model : ', formModel );
       this.restourant.postUpdate(formModel.id, formModel).subscribe((response) => {
         console.log('response update ', response);
         if (response['resule'] == 'successful') {
@@ -169,25 +208,24 @@ export class RestourantComponent implements OnInit {
     });
   }
   multiDelete() {
-    if (!confirm('Please confirm delete'))
-      return false;
+      if (!confirm('Please confirm delete'))
+        return false;
 
-    let getId: any = [];
-    for (var i = 0; i < this.rows.length; i++) {
-      if (this.rows[i].selected == true) {
-        console.log('rows value : ', this.rows[i]);
-        getId.push(this.rows[i].id);
+      let getId: any = [];
+      for (var i = 0; i < this.rows.length; i++) {
+        if (this.rows[i].selected == true) {
+            console.log('rows value : ', this.rows[i]);
+            getId.push(this.rows[i].id);
+        }
       }
-    }
-    console.log('getId : ', getId, ' join is  ', getId.join('-'));
-
-    this.restourant.getDelete(getId.join('-')).subscribe((response) => {
-      if (response['result'] == 'successful') {
-        this.fetchAll();
-      } else {
-        alert(response['msg']);
-      }
-    });
+      console.log('getId : ', getId, ' join is  ', getId.join('-'));
+      this.restourant.getDelete(getId.join('-')).subscribe((response) => {
+          if (response['result'] == 'successful') {
+            this.fetchAll();
+          } else {
+            alert(response['msg']);
+          }
+      });
   }
 
   clearFile() {
@@ -205,10 +243,13 @@ export class RestourantComponent implements OnInit {
     console.log('select all = ' , this.rows.length );
     for (var i = 0; i < this.rows.length; i++) {
       this.rows[i].selected = this.selectAll;
+      console.log('selected : ', this.rows[i].selected ,' select all ', this.selectAll );
     }
   }
   checkIfAllSelected() {
+    console.log('select one');
     this.selectAll = this.rows.every(function (item: any) {
+      console.log( 'select item ', item );
       return item.selected == true;
     })
   }

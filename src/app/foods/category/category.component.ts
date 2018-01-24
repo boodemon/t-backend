@@ -42,10 +42,7 @@ export class CategoryComponent implements OnInit {
 
   cateAll(){
     return this.category.getAll().subscribe((response) => {
-      if( response['code'] != 200 ){
-        alert( response['msg']);
-        this.Auth.logout();
-      }else{
+      if( response['code'] == 200 ){
         this.rows = response['data']['data'];
       }
     },
