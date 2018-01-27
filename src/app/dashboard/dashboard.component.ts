@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'app/services/auth.service';
+import { CategoryService } from 'app/services/category.service';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   templateUrl: 'dashboard.component.html'
@@ -7,7 +11,14 @@ import { Router } from '@angular/router';
 export class DashboardComponent implements OnInit {
 
   // constructor( ) { }
-
+  constructor(
+    private Auth: AuthService,
+    private category: CategoryService,
+    private modalService: BsModalService,
+    private fb: FormBuilder
+  ) {
+    Auth.online();
+  }
   public brandPrimary = '#20a8d8';
   public brandSuccess = '#4dbd74';
   public brandInfo = '#63c2de';

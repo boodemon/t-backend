@@ -28,7 +28,6 @@ export class RestourantComponent implements OnInit {
   selectAll: boolean = false;
   onSelect: boolean = false;
   restourantGroup:any = [];
-
   @ViewChild('fileInput') fileInput: ElementRef;
 
   constructor(
@@ -100,32 +99,13 @@ export class RestourantComponent implements OnInit {
         this.formRestourant.get('_method').setValue('PUT');
         this.formRestourant.get('active').setValue(item.active == 'Y' ? true : false);
         this.img = item.image;
-        this.ckGroups = item.groups;
-
-        if( item.groups.length !== null )
-        this.groupChecked( item.groups );
-        
+        this.ckGroups = item.groups;        
       } else {
         alert(response['msg']);
         this.modalRef.hide();
       }
     });
     this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
-  }
-  groupChecked(groups){
-    console.log('groups : ', groups );
-    groups = this.restourantGroup.every(function (item: any) {
-        console.log('restourantGroup item ', item);
-        //return item.selected == true;
-    })
-    /*
-    for ( let x = 0; x < this.restourantGroup.length; x++ ) {
-        let resId = this.restourantGroup[x].id;
-        if (groups.indexOf(resId) !== -1){
-            this.groups[resId] = true;
-        }
-    }
-    */
   }
 
   onFileChange(event) {
@@ -145,15 +125,15 @@ export class RestourantComponent implements OnInit {
   }
 
   groupVal(){
-    const group:any = [];
-    for(let x = 0; x < this.restourantGroup.length; x++){       
-      if (this.restourantGroup[x].selected !== undefined){
-          if (this.restourantGroup[x].selected === true )
-              group.push( this.restourantGroup[x].id );
-       }
-    }
-    this.formRestourant.get('groups').setValue(group);
-    //return group;
+      const group:any = [];
+      for(let x = 0; x < this.restourantGroup.length; x++){
+        console.log('Group val : ', this.restourantGroup[x].selecteds );
+        if (this.restourantGroup[x].selecteds !== undefined){
+            if(this.restourantGroup[x].selecteds === true )
+                group.push( this.restourantGroup[x].id );
+        }
+      }
+      this.formRestourant.get('groups').setValue( group );
   }
 
   onSubmit() {
@@ -247,9 +227,7 @@ export class RestourantComponent implements OnInit {
     }
   }
   checkIfAllSelected() {
-    console.log('select one');
     this.selectAll = this.rows.every(function (item: any) {
-      console.log( 'select item ', item );
       return item.selected == true;
     })
   }

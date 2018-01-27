@@ -93,7 +93,7 @@
             <div class="row">
                 <div class="col-md-3" *ngFor="let g of restourantGroup">
                     <label>
-                        <input type="checkbox" [value]="g.id" [(ngModel)]="ckGroups" formControlName="groups"/> {{ g.name }}
+                        <input type="checkbox" [(ngModel)]="g.selecteds" formControlName="groups"/> {{ g.name }}
                     </label>
                 </div>
             </div>
